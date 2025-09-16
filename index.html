@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -14,9 +14,692 @@
     <div id="result"></div>
   </div>
 
-  <!-- Load JS at the end so elements exist -->
+ 
    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
 
   <script src="/static/script.js"></script>
 </body>
+</html> -->
+<!-- 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Course Generator</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --primary: #4361ee;
+      --secondary: #3a0ca3;
+      --accent: #7209b7;
+      --light: #f8f9fa;
+      --dark: #212529;
+      --success: #4cc9f0;
+      --border-radius: 12px;
+      --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      --transition: all 0.3s ease;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      color: var(--dark);
+      line-height: 1.6;
+      min-height: 100vh;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .container {
+      max-width: 800px;
+      width: 100%;
+      background: white;
+      padding: 40px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      transition: var(--transition);
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    
+    .header h1 {
+      color: var(--primary);
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+    
+    .header p {
+      color: #666;
+      font-size: 1.1rem;
+    }
+    
+    .input-group {
+      position: relative;
+      margin-bottom: 25px;
+    }
+    
+    .input-group i {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #aaa;
+    }
+    
+    input#topic {
+      width: 100%;
+      padding: 18px 20px 18px 50px;
+      font-size: 16px;
+      border: 2px solid #eaeaea;
+      border-radius: var(--border-radius);
+      transition: var(--transition);
+    }
+    
+    input#topic:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+    }
+    
+    button {
+      width: 100%;
+      padding: 18px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+    }
+    
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 7px 20px rgba(67, 97, 238, 0.4);
+    }
+    
+    button:active {
+      transform: translateY(0);
+    }
+    
+    #generateBtn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .loading {
+      display: none;
+      text-align: center;
+      margin: 30px 0;
+    }
+    
+    .loading-spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid #f3f3f3;
+      border-top: 5px solid var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    #result {
+      margin-top: 30px;
+      padding: 30px;
+      background: var(--light);
+      border-radius: var(--border-radius);
+      display: none;
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+    }
+    
+    .course-header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 2px dashed #eaeaea;
+    }
+    
+    .module {
+      margin-bottom: 25px;
+      padding: 20px;
+      background: white;
+      border-radius: var(--border-radius);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      transition: var(--transition);
+    }
+    
+    .module:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .module h3 {
+      color: var(--secondary);
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .module-content {
+      padding-left: 10px;
+    }
+    
+    .module-content b {
+      color: var(--accent);
+      display: inline-block;
+      margin-top: 12px;
+    }
+    
+    .module-content ul {
+      margin: 10px 0 10px 20px;
+    }
+    
+    .module-content li {
+      margin-bottom: 8px;
+    }
+    
+    @media (max-width: 600px) {
+      .container {
+        padding: 25px;
+      }
+      
+      .header h1 {
+        font-size: 2rem;
+      }
+      
+      input#topic, button {
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1><i class="fas fa-graduation-cap"></i> AI Course Generator</h1>
+      <p>Enter any topic to generate a comprehensive learning course</p>
+    </div>
+    
+    <div class="input-group">
+      <i class="fas fa-search"></i>
+      <input type="text" id="topic" placeholder="Enter a topic (e.g., Machine Learning, Web Development)" />
+    </div>
+    
+    <button id="generateBtn">
+      <i class="fas fa-plus-circle"></i> Generate Course
+    </button>
+    
+    <div class="loading">
+      <div class="loading-spinner"></div>
+      <p>Generating your course content...</p>
+    </div>
+    
+    <div id="result"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const generateBtn = document.getElementById('generateBtn');
+      const topicInput = document.getElementById('topic');
+      const resultDiv = document.getElementById('result');
+      const loadingDiv = document.querySelector('.loading');
+      
+      generateBtn.addEventListener('click', function() {
+        const topic = topicInput.value.trim();
+        
+        if (!topic) {
+          alert('Please enter a topic first!');
+          topicInput.focus();
+          return;
+        }
+        
+        // Show loading state
+        generateBtn.disabled = true;
+        loadingDiv.style.display = 'block';
+        resultDiv.style.display = 'none';
+        
+        // Simulate API call with timeout
+        setTimeout(() => {
+          // This would be replaced with actual API call in production
+          const mockCourse = generateMockCourse(topic);
+          const htmlContent = marked.parse(mockCourse);
+          
+          resultDiv.innerHTML = htmlContent;
+          loadingDiv.style.display = 'none';
+          resultDiv.style.display = 'block';
+          generateBtn.disabled = false;
+          
+          // Scroll to results
+          resultDiv.scrollIntoView({ behavior: 'smooth' });
+        }, 2000);
+      });
+      
+      // Example course generator (would be replaced with real API)
+      function generateMockCourse(topic) {
+        return `
+# ${topic} Course Outline
+
+## Module 1: Introduction to ${topic}
+**Overview:**
+- What is ${topic}?
+- History and evolution
+- Key concepts and terminology
+
+**Learning Objectives:**
+- Understand the basic principles of ${topic}
+- Identify the main components of ${topic}
+- Recognize real-world applications
+
+## Module 2: Core Principles
+**Fundamental Concepts:**
+- The foundational theories behind ${topic}
+- How ${topic} works in practice
+- Common methodologies and approaches
+
+**Key Takeaways:**
+- Master the essential building blocks of ${topic}
+- Understand how different elements interact
+- Develop a solid foundation for advanced study
+
+## Module 3: Advanced Topics
+**In-Depth Exploration:**
+- Advanced techniques in ${topic}
+- Specialized areas of focus
+- Current research and developments
+
+**Practical Applications:**
+- How to apply advanced concepts
+- Case studies and examples
+- Problem-solving strategies
+
+## Module 4: Practical Implementation
+**Hands-On Learning:**
+- Step-by-step guide to implementing ${topic}
+- Best practices and common pitfalls
+- Tools and resources
+
+**Project Work:**
+- Develop a complete ${topic} project
+- Testing and refinement techniques
+- Presentation of results
+
+## Module 5: Future Directions
+**Emerging Trends:**
+- Where ${topic} is heading
+- New technologies and methodologies
+- Career opportunities in ${topic}
+
+**Next Steps:**
+- Further learning resources
+- Communities and networks
+- Continuing your ${topic} education
+        `;
+      }
+    });
+  </script>
+</body>
 </html>
+ -->
+
+
+
+
+ <!-- try -->
+
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Course Generator</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <style>
+    :root {
+      --primary: #4361ee;
+      --secondary: #3a0ca3;
+      --accent: #7209b7;
+      --light: #f8f9fa;
+      --dark: #212529;
+      --success: #4cc9f0;
+      --error: #e63946;
+      --border-radius: 12px;
+      --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      --transition: all 0.3s ease;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+      color: var(--dark);
+      line-height: 1.6;
+      min-height: 100vh;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .container {
+      max-width: 800px;
+      width: 100%;
+      background: white;
+      padding: 40px;
+      border-radius: var(--border-radius);
+      box-shadow: var(--box-shadow);
+      transition: var(--transition);
+    }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+    
+    .header h1 {
+      color: var(--primary);
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+      font-weight: 700;
+    }
+    
+    .header p {
+      color: #666;
+      font-size: 1.1rem;
+    }
+    
+    .input-group {
+      position: relative;
+      margin-bottom: 25px;
+    }
+    
+    .input-group i {
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #aaa;
+    }
+    
+    input#topic {
+      width: 100%;
+      padding: 18px 20px 18px 50px;
+      font-size: 16px;
+      border: 2px solid #eaeaea;
+      border-radius: var(--border-radius);
+      transition: var(--transition);
+    }
+    
+    input#topic:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+    }
+    
+    button {
+      width: 100%;
+      padding: 18px;
+      background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+      color: white;
+      border: none;
+      border-radius: var(--border-radius);
+      font-size: 18px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition);
+      box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+    }
+    
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 7px 20px rgba(67, 97, 238, 0.4);
+    }
+    
+    button:active {
+      transform: translateY(0);
+    }
+    
+    button:disabled {
+      background: #ccc;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+    }
+    
+    #generateBtn {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .loading {
+      display: none;
+      text-align: center;
+      margin: 30px 0;
+    }
+    
+    .loading-spinner {
+      width: 50px;
+      height: 50px;
+      border: 5px solid #f3f3f3;
+      border-top: 5px solid var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+    
+    #result {
+      margin-top: 30px;
+      padding: 30px;
+      background: var(--light);
+      border-radius: var(--border-radius);
+      display: none;
+      box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05);
+    }
+    
+    .error {
+      color: var(--error);
+      text-align: center;
+      padding: 15px;
+      background: rgba(230, 57, 70, 0.1);
+      border-radius: var(--border-radius);
+      margin: 10px 0;
+    }
+    
+    .course-header {
+      text-align: center;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 2px dashed #eaeaea;
+    }
+    
+    .module {
+      margin-bottom: 25px;
+      padding: 20px;
+      background: white;
+      border-radius: var(--border-radius);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      transition: var(--transition);
+    }
+    
+    .module:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    }
+    
+    .module h3 {
+      color: var(--secondary);
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .module-content {
+      padding-left: 10px;
+    }
+    
+    .module-content b {
+      color: var(--accent);
+      display: inline-block;
+      margin-top: 12px;
+    }
+    
+    .module-content ul {
+      margin: 10px 0 10px 20px;
+    }
+    
+    .module-content li {
+      margin-bottom: 8px;
+    }
+    
+    @media (max-width: 600px) {
+      .container {
+        padding: 25px;
+      }
+      
+      .header h1 {
+        font-size: 2rem;
+      }
+      
+      input#topic, button {
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1><i class="fas fa-graduation-cap"></i> AI Course Generator</h1>
+      <p>Enter any topic to generate a comprehensive learning course</p>
+    </div>
+    
+    <div class="input-group">
+      <i class="fas fa-search"></i>
+      <input type="text" id="topic" placeholder="Enter a topic (e.g., Machine Learning, Web Development)" />
+    </div>
+    
+    <button id="generateBtn">
+      <i class="fas fa-plus-circle"></i> Generate Course
+    </button>
+    
+    <div class="loading">
+      <div class="loading-spinner"></div>
+      <p>Generating your course content...</p>
+    </div>
+    
+    <div id="result"></div>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const generateBtn = document.getElementById("generateBtn");
+      const topicInput = document.getElementById("topic");
+      const resultDiv = document.getElementById("result");
+      const loadingDiv = document.querySelector('.loading');
+      
+      generateBtn.addEventListener("click", async () => {
+        const topic = topicInput.value.trim();
+        
+        if (!topic) {
+          showError("Please enter a topic first!");
+          topicInput.focus();
+          return;
+        }
+        
+        // Show loading state
+        generateBtn.disabled = true;
+        loadingDiv.style.display = 'block';
+        resultDiv.style.display = 'none';
+        
+        try {
+          const res = await fetch("http://127.0.0.1:5000/generate_course", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ topic: topic })
+          });
+
+          const data = await res.json();
+          
+          if (data.course) {
+            // Format the course content
+            let formatted = data.course
+              .replace(/## (.*?)(?=\n|$)/g, "<h2>$1</h2>")
+              .replace(/### (.*?)(?=\n|$)/g, "<h3>$1</h3>")
+              .replace(/\*\*(.*?)\*\*/g, "<b>$1</b>")
+              .replace(/\*(.*?)\*/g, "<li>$1</li>")
+              .replace(/\n/g, "<br>");
+              
+            resultDiv.innerHTML = `
+              <div class="course-header">
+                <h2>Your ${topic} Course</h2>
+                <p>Generated just for you</p>
+              </div>
+              ${formatted}
+            `;
+          } else {
+            showError(data.error || "Unknown error occurred");
+          }
+        } catch (err) {
+          showError("Failed to connect to backend. Make sure the server is running.");
+          console.error(err);
+        } finally {
+          loadingDiv.style.display = 'none';
+          resultDiv.style.display = 'block';
+          generateBtn.disabled = false;
+        }
+      });
+      
+      function showError(message) {
+        resultDiv.innerHTML = `<div class="error"><i class="fas fa-exclamation-circle"></i> ${message}</div>`;
+        resultDiv.style.display = 'block';
+      }
+      
+      // Allow pressing Enter to submit
+      topicInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          generateBtn.click();
+        }
+      });
+    });
+  </script>
+</body>
+</html>
+
